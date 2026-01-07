@@ -79,6 +79,10 @@ Catatan:
 ## Panduan Pengguna
 
 ### Navigasi
+- Pastikan start laragon
+- Tambahkan database bernama 'dispatch' di HeidiSQL atau PhpMyAdmin
+
+### Navigasi
 
 - Aplikasi terdiri dari 4 tab: **Mata Praktikum**, **Asisten**, **Ruangan**, **Jadwal**.
 - Pilih tab untuk mengelola data terkait.
@@ -138,3 +142,8 @@ Catatan:
 - Atur filter (jika diperlukan), pastikan tabel menampilkan data yang diinginkan.
 - Klik **Export PDF**.
 - Pilih lokasi penyimpanan file.
+
+**Konfigurasi**
+
+- Atur versi java dan compiler di file `pom.xml`.
+- Sesuaikan dengan properti mesin anda
