@@ -4,16 +4,14 @@ public class Asisten {
     private Long id;
     private String nim;
     private String nama;
-    private String kontak;
 
     public Asisten() {
     }
 
-    public Asisten(Long id, String nim, String nama, String kontak) {
+    public Asisten(Long id, String nim, String nama) {
         this.id = id;
         this.nim = nim;
         this.nama = nama;
-        this.kontak = kontak;
     }
 
     public Long getId() {
@@ -38,14 +36,6 @@ public class Asisten {
 
     public void setNama(String nama) {
         this.nama = nama;
-    }
-
-    public String getKontak() {
-        return kontak;
-    }
-
-    public void setKontak(String kontak) {
-        this.kontak = kontak;
     }
 
     @Override
