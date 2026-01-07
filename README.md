@@ -71,12 +71,10 @@ Catatan:
 
 ## Cara Menjalankan
 
-### Opsi A: Jalankan dari IDE
+### Opsi Jalankan dari IDE
 
 1. Buka project.
 2. Jalankan main class: `App.java`.
-
-### Opsi B: Jalankan via Maven (jika Maven tersedia)
 
 ## Panduan Pengguna
 
