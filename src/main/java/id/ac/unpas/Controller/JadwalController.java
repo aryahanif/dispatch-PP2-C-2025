@@ -31,10 +31,10 @@ public class JadwalController {
     private List<Ruangan> cacheRuangan;
 
     public JadwalController(JadwalDao jadwalDao,
-                            MataPraktikumDao mataPraktikumDao,
-                            AsistenDao asistenDao,
-                            RuanganDao ruanganDao,
-                            JadwalView view) {
+            MataPraktikumDao mataPraktikumDao,
+            AsistenDao asistenDao,
+            RuanganDao ruanganDao,
+            JadwalView view) {
         this.jadwalDao = jadwalDao;
         this.mataPraktikumDao = mataPraktikumDao;
         this.asistenDao = asistenDao;
@@ -194,7 +194,9 @@ public class JadwalController {
             return;
         }
         Object idObj = view.getTable().getValueAt(row, 0);
-        Long id = (idObj instanceof Number) ? ((Number) idObj).longValue() : UiUtil.tryParseLong(String.valueOf(idObj));
+        Long id = (idObj instanceof Number)
+                ? Long.valueOf(((Number) idObj).longValue())
+                : UiUtil.tryParseLong(String.valueOf(idObj));
         if (id == null) {
             return;
         }
