@@ -26,6 +26,11 @@ public class JadwalView extends JPanel {
     private final JButton btnHapus = new JButton("Hapus");
     private final JButton btnClear = new JButton("Clear");
 
+    private final JComboBox<Asisten> cbFilterAsisten = new JComboBox<>();
+    private final JComboBox<Ruangan> cbFilterRuangan = new JComboBox<>();
+    private final JButton btnResetFilter = new JButton("Reset Filter");
+    private final JButton btnExportPdf = new JButton("Export PDF");
+
     private final JTable table;
 
     public JadwalView() {
@@ -37,6 +42,25 @@ public class JadwalView extends JPanel {
         // show time only
         spJamMulai.setEditor(new JSpinner.DateEditor(spJamMulai, "HH:mm"));
         spJamSelesai.setEditor(new JSpinner.DateEditor(spJamSelesai, "HH:mm"));
+
+        cbFilterAsisten.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public java.awt.Component getListCellRendererComponent(JList<?> list, Object value, int index,
+                    boolean isSelected, boolean cellHasFocus) {
+                super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                setText(value == null ? "Semua Asisten" : String.valueOf(value));
+                return this;
+            }
+        });
+        cbFilterRuangan.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public java.awt.Component getListCellRendererComponent(JList<?> list, Object value, int index,
+                    boolean isSelected, boolean cellHasFocus) {
+                super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                setText(value == null ? "Semua Ruangan" : String.valueOf(value));
+                return this;
+            }
+        });
 
         JPanel form = new JPanel(new GridBagLayout());
         form.setBorder(BorderFactory.createTitledBorder("Form Jadwal Praktikum"));
@@ -82,18 +106,16 @@ public class JadwalView extends JPanel {
         c.gridx = 0;
         c.gridy = 4;
         c.weightx = 0;
-        form.add(new JLabel("Jam Mulai"), c);
+        form.add(new JLabel("Waktu"), c);
         c.gridx = 1;
         c.weightx = 1;
-        form.add(spJamMulai, c);
-
-        c.gridx = 0;
-        c.gridy = 5;
-        c.weightx = 0;
-        form.add(new JLabel("Jam Selesai"), c);
-        c.gridx = 1;
-        c.weightx = 1;
-        form.add(spJamSelesai, c);
+        JPanel waktuPanel = new JPanel();
+        waktuPanel.add(new JLabel("Jam Mulai ("));
+        waktuPanel.add(spJamMulai);
+        waktuPanel.add(new JLabel(") - Jam Selesai ("));
+        waktuPanel.add(spJamSelesai);
+        waktuPanel.add(new JLabel(")"));
+        form.add(waktuPanel, c);
 
         JPanel actions = new JPanel();
         actions.add(btnTambah);
@@ -102,7 +124,7 @@ public class JadwalView extends JPanel {
         actions.add(btnClear);
 
         c.gridx = 0;
-        c.gridy = 6;
+        c.gridy = 5;
         c.gridwidth = 2;
         c.weightx = 0;
         form.add(actions, c);
@@ -118,7 +140,21 @@ public class JadwalView extends JPanel {
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         add(form, BorderLayout.NORTH);
-        add(new JScrollPane(table), BorderLayout.CENTER);
+
+        JPanel filterPanel = new JPanel();
+        filterPanel.setBorder(BorderFactory.createTitledBorder("Pencarian & Laporan"));
+        filterPanel.add(new JLabel("Asisten"));
+        filterPanel.add(cbFilterAsisten);
+        filterPanel.add(new JLabel("Ruangan"));
+        filterPanel.add(cbFilterRuangan);
+        filterPanel.add(btnResetFilter);
+        filterPanel.add(btnExportPdf);
+
+        JPanel tablePanel = new JPanel(new BorderLayout(5, 5));
+        tablePanel.add(filterPanel, BorderLayout.NORTH);
+        tablePanel.add(new JScrollPane(table), BorderLayout.CENTER);
+
+        add(tablePanel, BorderLayout.CENTER);
     }
 
     public JTable getTable() {
@@ -139,6 +175,22 @@ public class JadwalView extends JPanel {
 
     public JButton getBtnClear() {
         return btnClear;
+    }
+
+    public JButton getBtnExportPdf() {
+        return btnExportPdf;
+    }
+
+    public JButton getBtnResetFilter() {
+        return btnResetFilter;
+    }
+
+    public JComboBox<Asisten> getCbFilterAsisten() {
+        return cbFilterAsisten;
+    }
+
+    public JComboBox<Ruangan> getCbFilterRuangan() {
+        return cbFilterRuangan;
     }
 
     public String getIdText() {
@@ -169,6 +221,17 @@ public class JadwalView extends JPanel {
         }
     }
 
+    public void setFilterAsistenItems(List<Asisten> items) {
+        cbFilterAsisten.removeAllItems();
+        cbFilterAsisten.addItem(null);
+        if (items == null) {
+            return;
+        }
+        for (Asisten a : items) {
+            cbFilterAsisten.addItem(a);
+        }
+    }
+
     public void setRuanganItems(List<Ruangan> items) {
         cbRuangan.removeAllItems();
         if (items == null) {
@@ -176,6 +239,17 @@ public class JadwalView extends JPanel {
         }
         for (Ruangan r : items) {
             cbRuangan.addItem(r);
+        }
+    }
+
+    public void setFilterRuanganItems(List<Ruangan> items) {
+        cbFilterRuangan.removeAllItems();
+        cbFilterRuangan.addItem(null);
+        if (items == null) {
+            return;
+        }
+        for (Ruangan r : items) {
+            cbFilterRuangan.addItem(r);
         }
     }
 
@@ -241,6 +315,11 @@ public class JadwalView extends JPanel {
         cbAsisten.setSelectedItem(null);
         cbRuangan.setSelectedItem(null);
         cbHari.setSelectedIndex(0);
+    }
+
+    public void resetFilter() {
+        cbFilterAsisten.setSelectedItem(null);
+        cbFilterRuangan.setSelectedItem(null);
     }
 
     public String validateInput() {

@@ -13,7 +13,7 @@ public class AppView extends JFrame {
     private final JTabbedPane tabs;
 
     public AppView() {
-        super("Sistem Jadwal Praktikum");
+        super("Aplikasi Manajemen Jadwal Praktikum");
 
         this.mataPraktikumView = new MataPraktikumView();
         this.asistenView = new AsistenView();
