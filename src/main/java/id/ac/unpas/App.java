@@ -1,17 +1,46 @@
 package id.ac.unpas;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-public class App {
-    static void main() {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        IO.println(String.format("Hello and welcome!"));
+import id.ac.unpas.Controller.*;
+import id.ac.unpas.Dao.*;
+import id.ac.unpas.Utils.*;
+import id.ac.unpas.View.*;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            IO.println("i = " + i);
-        }
+public class App {
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            AppView appView = new AppView();
+
+            try {
+                DbInit.init();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(appView,
+                        "Gagal inisialisasi database: " + ex.getMessage(),
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            MataPraktikumDao mataPraktikumDao = new MataPraktikumDao();
+            AsistenDao asistenDao = new AsistenDao();
+            RuanganDao ruanganDao = new RuanganDao();
+            JadwalDao jadwalDao = new JadwalDao();
+
+            new MataPraktikumController(mataPraktikumDao, appView.getMataPraktikumView());
+            new AsistenController(asistenDao, appView.getAsistenView());
+            new RuanganController(ruanganDao, appView.getRuanganView());
+            JadwalController jadwalController = new JadwalController(jadwalDao, mataPraktikumDao, asistenDao,
+                    ruanganDao, appView.getJadwalView());
+
+            appView.addTabsChangeListener(e -> {
+                if (appView.isJadwalTabSelected()) {
+                    jadwalController.refresh();
+                }
+            });
+
+            appView.setVisible(true);
+        });
     }
 }
